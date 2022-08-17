@@ -24,7 +24,7 @@ end
 class Movie
     # setters y getters
     attr_accessor :title, :duration, :min_age, :director
-    
+
     def initialize(title, duration, min_age, director)
         @title = title
         @duration = duration
@@ -34,7 +34,7 @@ class Movie
 end
 
 class MovieRoom
-    # class variable 
+    # class variable
     @@room_identifier = 0
     attr_accessor :movie, :price_ticket, :identifier, :seats
 
@@ -47,14 +47,20 @@ class MovieRoom
         @seats = []
     end
 
-    def generate_seats(nums=[])
+    def generate_seats(columns, rows)
         # deberia recibir un numero de columnas y de filas, y generar la matriz de sillas
-        # ej generate_seats(3, 5)  --> columnas 3, ['A', 'B', 'C']
+        # ej generate_seats(5, 5)  --> columnas 5, ['A', 'B', 'C', 'D', 'E']
                                    # --> filas 5 , [1,2,3,4,5]
                                    # ej sillas A1, A2, A3 ... B1, B2 ...
-        nums.each do |num|
-            seat = Seat.new('A', num)
-            seats.push(seat)
+
+        columns_array = ('A'..'Z').to_a.take(columns)
+        rows_array = (1..rows).to_a
+
+        columns_array.each do |column|
+            rows_array.each do |row|
+                seat = Seat.new(column, row)
+                seats.push(seat)
+            end
         end
     end
 
@@ -92,14 +98,14 @@ class Seat
     def initialize(column, row, user= nil)
         @column = column
         @row = row
-        @user = user    
+        @user = user
     end
 
     def occupied?
         !user.nil?
     end
 end
-  
+
 class User
     attr_accessor :name, :age, :money
 
@@ -113,34 +119,46 @@ end
 
 
 movie1 = Movie.new("Shrek", "2 hrs", 7, "Andrew Adamson")
+movie2 = Movie.new("Matrix", "2,5 hrs", 13, "Pepe Grillo")
 cine = Cine.new("Astor", "Cra 30") # TODO: implement singleton pattern to avoid instance more than one object
 
 cine.create_movie_room(movie1, 15000)
 cine.create_movie_room(movie1, 25000)
+cine.create_movie_room(movie2, 25000)
 
 movie_room1 = cine.movie_rooms[0]
-movie_room1.generate_seats([1,2,3,10])
-p movie_room1.seats
-jose = User.new("Jose", 20, 5000)
-movie_room1.assign_seat(jose)
+movie_room2 = cine.movie_rooms[1]
+movie_room3 = cine.movie_rooms[2]
+
+puts "ANTES"
 p movie_room1.seats
 
-nico = User.new("Nico", 18, 5000)
-movie_room1.assign_seat(nico)
+movie_room1.generate_seats(8, 9)
+puts "DESPUES"
 p movie_room1.seats
 
-migue = User.new("Migue", 18, 5000)
-movie_room1.assign_seat(migue)
-p movie_room1.seats
+# movie_room1.generate_seats([1,2,3,10])
+# p movie_room1.seats
+# jose = User.new("Jose", 20, 5000)
+# movie_room1.assign_seat(jose)
+# p movie_room1.seats
 
-yony = User.new("Yony", 39, 5000)
-movie_room1.assign_seat(yony)
-p movie_room1.seats
+# nico = User.new("Nico", 18, 5000)
+# movie_room1.assign_seat(nico)
+# p movie_room1.seats
+
+# migue = User.new("Migue", 18, 5000)
+# movie_room1.assign_seat(migue)
+# p movie_room1.seats
+
+# yony = User.new("Yony", 39, 5000)
+# movie_room1.assign_seat(yony)
+# p movie_room1.seats
 
 
-juan = User.new("juan", 39, 5000)
-movie_room1.assign_seat(juan)
-p movie_room1.seats
+# juan = User.new("juan", 39, 5000)
+# movie_room1.assign_seat(juan)
+# p movie_room1.seats
 # a1 = Seat.new('A', 1)
 # a2 = Seat.new('A', 2)
 # p a1
@@ -160,3 +178,15 @@ p movie_room1.seats
 #p cine.movie_rooms
 
 #puts cine.movie_rooms_number
+
+#RETO
+# Hacer un menu, que permita ejecutar las acciones del programa
+# opcion para crear un cine
+# opcion para crear una pelicula
+# opcion para crear salas de cine
+# opcion para generar sillas
+# opcion para crear usuarios
+# opcion para asignar usuarios a las sillas
+# ver como esta la sala de cine (diseño)
+
+
